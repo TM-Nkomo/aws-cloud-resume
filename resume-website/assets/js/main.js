@@ -335,7 +335,7 @@
 			// Counter
 			const counter = document.querySelector(".counter-number");
 			async function updateCounter() {
-				let response = await fetch("https://et3fwvwoyi3zxmnoy7maqsd6ye0xmlpr.lambda-url.eu-north-1.on.aws/");
+				let response = await fetch("https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/resume");
 				let data = await response.json();
 				counter.innerHTML = `${data}`;
 			}
