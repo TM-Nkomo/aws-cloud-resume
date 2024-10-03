@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'infra-as-code/**'  
+      - 'infra-as-code/**'   
       - 'lambda/**'          
 
 jobs:
@@ -27,6 +27,7 @@ jobs:
           pip install boto3 pytest
 
       - name: Run tests
+        working-directory: infra-as-code 
         run: |
           pytest lambda/test_counter_function.py
 
@@ -36,13 +37,13 @@ jobs:
           terraform_version: 1.9.6
 
       - name: Terraform Init
+        working-directory: infra-as-code 
         run: terraform init
-        working-directory: infra-as-code  
 
       - name: Terraform Apply
+        working-directory: infra-as-code  
         run: terraform apply -auto-approve
-        working-directory: infra-as-code
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-north-1'  
+          AWS_REGION: 'eu-north-1' 
