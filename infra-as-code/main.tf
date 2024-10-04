@@ -28,6 +28,9 @@ resource "aws_iam_role" "iam_for_lambda" {
         ]
     }
     EOF
+    lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 # IAM Policy for managing the project resources
@@ -61,6 +64,10 @@ resource "aws_iam_policy" "iam_for_project" {
             }
         ]
     })
+    
+    lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 # Attach the IAM policy to the IAM role
@@ -100,6 +107,10 @@ resource "aws_dynamodb_table" "table" {
   attribute {
     name = "id"
     type = "S"
+  }
+
+  lifecycle {
+    ignore_changes = [name]
   }
 }
 
