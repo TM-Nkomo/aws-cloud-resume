@@ -1,12 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,600,600italic");
 
-/*
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -2338,6 +2332,27 @@ input, select, textarea {
 
 			ul.actions.fit.stacked {
 				width: 100%;
+			}
+
+			@media screen and (max-width: 600px) {
+
+				ul.actions{
+						-moz-flex-direction: column;
+						-webkit-flex-direction: column;
+						-ms-flex-direction: column;
+						flex-direction: column;
+						margin-left: 0;
+			
+						
+				}
+				ul.actions li {
+					padding: 1.3em 0 0 0;
+				}
+			
+				ul.actions li:first-child {
+					padding-top: 0;
+				}
+	
 			}
 
 /* Icons */
