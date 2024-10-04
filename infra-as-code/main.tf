@@ -3,89 +3,109 @@ resource "aws_lambda_function" "counter" {
     filename         = data.archive_file.counter_zip.output_path
     source_code_hash = data.archive_file.counter_zip.output_base64sha256
     function_name    = "counter_function"
-    role             = aws_iam_role.iam_for_lambda.arn
+    role             = data.aws_iam_role.iam_for_lambda.arn
     handler          = "counter_function.lambda_handler"
     runtime          = "python3.9"
 }
+
 
 # AWS Lambda Function for Sending Emails
 resource "aws_lambda_function" "send_email" {
     filename         = data.archive_file.send_email_zip.output_path
     source_code_hash = data.archive_file.send_email_zip.output_base64sha256
     function_name    = "send_email_function"
-    role             = aws_iam_role.iam_for_lambda.arn
+    role             = data.aws_iam_role.iam_for_lambda.arn
     handler          = "send_email_function.lambda_handler"
     runtime          = "python3.9"
 }
 
 # IAM Role for the Lambda Function
-resource "aws_iam_role" "iam_for_lambda" {
-    name = "iam_for_lambda"
+# resource "aws_iam_role" "iam_for_lambda" {
+#     name = "iam_for_lambda"
 
-    # Assume role policy that allows Lambda to assume this role
-    assume_role_policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": "sts:AssumeRole",
-                "Principal": {
-                    "Service": "lambda.amazonaws.com"
-                },
-                "Effect": "Allow",
-                "Sid": ""
-            }
-        ]
-    }
-    EOF
+#     # Assume role policy that allows Lambda to assume this role
+#     assume_role_policy = <<EOF
+#     {
+#         "Version": "2012-10-17",
+#         "Statement": [
+#             {
+#                 "Action": "sts:AssumeRole",
+#                 "Principal": {
+#                     "Service": "lambda.amazonaws.com"
+#                 },
+#                 "Effect": "Allow",
+#                 "Sid": ""
+#             }
+#         ]
+#     }
+#     EOF
+# }
+
+# Data source to fetch the existing IAM role
+data "aws_iam_role" "iam_for_lambda" {
+  name = "iam_for_lambda" # Use the existing IAM role name
 }
+
 
 # IAM Policy for managing the project resources
-resource "aws_iam_policy" "iam_for_project" {
-    name        = "aws_iam_policy_for_project"
-    path        = "/"
-    description = "AWA IAM Policy for managing the resume project role"
+# resource "aws_iam_policy" "iam_for_project" {
+#     name        = "aws_iam_policy_for_project"
+#     path        = "/"
+#     description = "AWA IAM Policy for managing the resume project role"
 
     # Policy document allowing actions on CloudWatch and DynamoDB
-    policy = jsonencode(
-        {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Action": [
-                        "logs:CreateLogGroup",
-                        "logs:CreateLogStream",
-                        "logs:PutLogEvents"
-                    ],
-                    "Resource": "arn:aws:logs:*:*:*",
-                    "Effect": "Allow"
-                },
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "dynamodb:UpdateItem",
-                        "dynamodb:GetItem",
-                        "dynamodb:PutItem"
-                    ],
-                    "Resource": "arn:aws:dynamodb:*:*:table/cloud-resume-test"
-                },
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "ses:SendEmail",
-                        "ses:SendTemplatedEmail"
-                    ],
-                    "Resource": "*"
-                }
-            ]
-        })
+#     policy = jsonencode(
+#         {
+#             "Version": "2012-10-17",
+#             "Statement": [
+#                 {
+#                     "Action": [
+#                         "logs:CreateLogGroup",
+#                         "logs:CreateLogStream",
+#                         "logs:PutLogEvents"
+#                     ],
+#                     "Resource": "arn:aws:logs:*:*:*",
+#                     "Effect": "Allow"
+#                 },
+#                 {
+#                     "Effect": "Allow",
+#                     "Action": [
+#                         "dynamodb:UpdateItem",
+#                         "dynamodb:GetItem",
+#                         "dynamodb:PutItem"
+#                     ],
+#                     "Resource": "arn:aws:dynamodb:*:*:table/cloud-resume-test"
+#                 },
+#                 {
+#                     "Effect": "Allow",
+#                     "Action": [
+#                         "ses:SendEmail",
+#                         "ses:SendTemplatedEmail"
+#                     ],
+#                     "Resource": "*"
+#                 }
+#             ]
+#         })
+# }
+
+# Data source to fetch the existing IAM policy
+data "aws_iam_policy" "iam_for_project" {
+  arn = "arn:aws:iam::423623825342:policy/aws_iam_policy_for_project"
 }
 
+
 # Attach the IAM policy to the IAM role
+# resource "aws_iam_role_policy_attachment" "attach_policy_to_iam_role" {
+#     role       = aws_iam_role.iam_for_lambda.name
+#     policy_arn = aws_iam_policy.iam_for_project.arn
+# }
+
+# Attach the existing IAM policy to the IAM role
 resource "aws_iam_role_policy_attachment" "attach_policy_to_iam_role" {
-    role       = aws_iam_role.iam_for_lambda.name
-    policy_arn = aws_iam_policy.iam_for_project.arn
+    role       = data.aws_iam_role.iam_for_lambda.name
+    policy_arn = data.aws_iam_policy.iam_for_project.arn
 }
+
 
 # Data source to create a ZIP archive of the Lambda function code for counter
 data "archive_file" "counter_zip" {
@@ -132,16 +152,22 @@ resource "aws_lambda_function_url" "url2" {
 }
 
 # DynamoDB Table configuration
-resource "aws_dynamodb_table" "table" {
-    name         = "cloud-resume-test"
-    billing_mode = "PAY_PER_REQUEST"
-    hash_key     = "id"
+# resource "aws_dynamodb_table" "table" {
+#     name         = "cloud-resume-test"
+#     billing_mode = "PAY_PER_REQUEST"
+#     hash_key     = "id"
 
-    attribute {
-        name = "id"
-        type = "S"
-    }
+#     attribute {
+#         name = "id"
+#         type = "S"
+#     }
+# }
+
+# Data source to fetch the existing DynamoDB table
+data "aws_dynamodb_table" "cloud_resume_test" {
+  name = "cloud-resume-test"
 }
+
 
 # API Gateway for the resume project
 resource "aws_apigatewayv2_api" "api" {
