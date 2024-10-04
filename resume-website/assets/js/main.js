@@ -333,12 +333,40 @@
 			});
 
 			// Counter
-			const counter = document.querySelector(".counter-number");
-			async function updateCounter() {
-				let response = await fetch("https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/resume");
-				let data = await response.json();
-				counter.innerHTML = `${data}`;
-			}
-			document.addEventListener("DOMContentLoaded", updateCounter);
+			// const counter = document.querySelector(".counter-number");
+			// async function updateCounter() {
+			// 	let response = await fetch("https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/resume");
+			// 	let data = await response.json();
+			// 	counter.innerHTML = `${data}`;
+			// }
+			// document.addEventListener("DOMContentLoaded", updateCounter);
+
+			// Send Email
+			document.getElementById('contactForm').addEventListener('submit', function(event) {
+				event.preventDefault();  // Prevent the default form submission
+
+				const formData = new FormData(this);
+				const data = Object.fromEntries(formData.entries());
+				console.log(data);
+
+				fetch('https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/send-email', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				})
+				.then(response => {
+					if (response.ok) {
+						alert('Message sent successfully!');
+					} else {
+						alert('Failed to send message. Please try again.');
+					}
+				})
+				.catch(error => {
+					alert('Error: ' + error);
+				});
+			});
+
 
 })(jQuery);
