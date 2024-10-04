@@ -1,22 +1,31 @@
 # AWS Lambda Function for Counting
-resource "aws_lambda_function" "counter" {
-    filename         = data.archive_file.counter_zip.output_path
-    source_code_hash = data.archive_file.counter_zip.output_base64sha256
-    function_name    = "counter_function"
-    role             = data.aws_iam_role.iam_for_lambda.arn
-    handler          = "counter_function.lambda_handler"
-    runtime          = "python3.9"
+# resource "aws_lambda_function" "counter" {
+#     filename         = data.archive_file.counter_zip.output_path
+#     source_code_hash = data.archive_file.counter_zip.output_base64sha256
+#     function_name    = "counter_function"
+#     role             = data.aws_iam_role.iam_for_lambda.arn
+#     handler          = "counter_function.lambda_handler"
+#     runtime          = "python3.9"
+# }
+
+# Data source for the existing Counter Lambda function
+data "aws_lambda_function" "counter" {
+  function_name = "counter_function" 
 }
 
-
 # AWS Lambda Function for Sending Emails
-resource "aws_lambda_function" "send_email" {
-    filename         = data.archive_file.send_email_zip.output_path
-    source_code_hash = data.archive_file.send_email_zip.output_base64sha256
-    function_name    = "send_email_function"
-    role             = data.aws_iam_role.iam_for_lambda.arn
-    handler          = "send_email_function.lambda_handler"
-    runtime          = "python3.9"
+# resource "aws_lambda_function" "send_email" {
+#     filename         = data.archive_file.send_email_zip.output_path
+#     source_code_hash = data.archive_file.send_email_zip.output_base64sha256
+#     function_name    = "send_email_function"
+#     role             = data.aws_iam_role.iam_for_lambda.arn
+#     handler          = "send_email_function.lambda_handler"
+#     runtime          = "python3.9"
+# }
+
+# Data source for the existing Send Email Lambda function
+data "aws_lambda_function" "send_email" {
+  function_name = "send_email_function" 
 }
 
 # IAM Role for the Lambda Function
@@ -123,7 +132,7 @@ data "archive_file" "send_email_zip" {
 
 # Lambda Function URL configuration for counter
 resource "aws_lambda_function_url" "url1" {
-    function_name      = aws_lambda_function.counter.function_name
+    function_name      = data.aws_lambda_function.counter.function_name
     authorization_type = "NONE"
 
     cors {
@@ -138,7 +147,7 @@ resource "aws_lambda_function_url" "url1" {
 
 # Lambda Function URL configuration for sending email
 resource "aws_lambda_function_url" "url2" {
-    function_name      = aws_lambda_function.send_email.function_name
+    function_name      = data.aws_lambda_function.send_email.function_name
     authorization_type = "NONE"
 
     cors {
@@ -187,7 +196,7 @@ resource "aws_apigatewayv2_api" "api" {
 resource "aws_apigatewayv2_integration" "counter_lambda_integration" {
     api_id             = aws_apigatewayv2_api.api.id
     integration_type   = "AWS_PROXY"
-    integration_uri    = aws_lambda_function.counter.invoke_arn
+    integration_uri    = data.aws_lambda_function.counter.invoke_arn
     integration_method = "POST"
     payload_format_version = "2.0"
 }
@@ -204,7 +213,7 @@ resource "aws_apigatewayv2_route" "counter_lambda_route" {
 resource "aws_apigatewayv2_integration" "send_email_lambda_integration" {
     api_id             = aws_apigatewayv2_api.api.id
     integration_type   = "AWS_PROXY"
-    integration_uri    = aws_lambda_function.send_email.invoke_arn
+    integration_uri    = data.aws_lambda_function.send_email.invoke_arn
     integration_method = "POST"
     payload_format_version = "2.0"
 }
@@ -228,7 +237,7 @@ resource "aws_apigatewayv2_stage" "default_stage" {
 resource "aws_lambda_permission" "apigw_counter_lambda_permission" {
     statement_id  = "AllowAPIGatewayInvokeCounter"
     action        = "lambda:InvokeFunction"
-    function_name = aws_lambda_function.counter.function_name
+    function_name = data.aws_lambda_function.counter.function_name
     principal     = "apigateway.amazonaws.com"
     source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
@@ -237,7 +246,7 @@ resource "aws_lambda_permission" "apigw_counter_lambda_permission" {
 resource "aws_lambda_permission" "apigw_send_email_lambda_permission" {
     statement_id  = "AllowAPIGatewayInvokeSendEmail"
     action        = "lambda:InvokeFunction"
-    function_name = aws_lambda_function.send_email.function_name
+    function_name = data.aws_lambda_function.send_email.function_name
     principal     = "apigateway.amazonaws.com"
     source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
