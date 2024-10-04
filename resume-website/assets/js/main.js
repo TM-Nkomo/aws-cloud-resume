@@ -333,13 +333,13 @@
 			});
 
 			// Counter
-			// const counter = document.querySelector(".counter-number");
-			// async function updateCounter() {
-			// 	let response = await fetch("https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/resume");
-			// 	let data = await response.json();
-			// 	counter.innerHTML = `${data}`;
-			// }
-			// document.addEventListener("DOMContentLoaded", updateCounter);
+			const counter = document.querySelector(".counter-number");
+			async function updateCounter() {
+				let response = await fetch("https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/resume");
+				let data = await response.json();
+				counter.innerHTML = `${data}`;
+			}
+			document.addEventListener("DOMContentLoaded", updateCounter);
 
 			// Send Email
 			document.getElementById('contactForm').addEventListener('submit', function(event) {
@@ -347,7 +347,6 @@
 
 				const formData = new FormData(this);
 				const data = Object.fromEntries(formData.entries());
-				console.log(data);
 
 				fetch('https://nsvax024xe.execute-api.eu-north-1.amazonaws.com/send-email', {
 					method: 'POST',
