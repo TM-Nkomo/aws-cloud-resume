@@ -343,7 +343,7 @@
 
 			// Send Email
 			document.getElementById('contactForm').addEventListener('submit', function(event) {
-				event.preventDefault();  // Prevent the default form submission
+				event.preventDefault();
 
 				const formData = new FormData(this);
 				const data = Object.fromEntries(formData.entries());
