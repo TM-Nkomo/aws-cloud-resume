@@ -10,7 +10,7 @@ data "aws_lambda_function" "send_email" {
 
 # Data source to fetch the existing IAM role
 data "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda" # Use the existing IAM role name
+  name = "iam_for_lambda"
 }
 
 
@@ -109,7 +109,7 @@ resource "aws_apigatewayv2_stage" "default_stage" {
     auto_deploy = true
 }
 
-# Permission for API Gateway to invoke Counter Lambda with a unique statement_id
+# Permission for API Gateway to invoke Counter Lambda
 resource "aws_lambda_permission" "apigw_counter_lambda_permission" {
   statement_id  = "AllowAPIGatewayInvokeCounter-${random_id.unique_suffix.hex}"
   action        = "lambda:InvokeFunction"
@@ -118,7 +118,7 @@ resource "aws_lambda_permission" "apigw_counter_lambda_permission" {
   source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
 
-# Permission for API Gateway to invoke Send Email Lambda with a unique statement_id
+# Permission for API Gateway to invoke Send Email Lambda
 resource "aws_lambda_permission" "apigw_send_email_lambda_permission" {
   statement_id  = "AllowAPIGatewayInvokeSendEmail-${random_id.unique_suffix.hex}"
   action        = "lambda:InvokeFunction"
