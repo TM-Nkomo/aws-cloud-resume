@@ -14,12 +14,12 @@ This repository contains my implementation of the AWS Cloud Resume Challenge, wh
 
 
 ## Technologies Used
-**Frontend:** HTML, CSS
-**Backend:** AWS Lambda (Python)
-**Database:** Amazon DynamoDB
-**Infrastructure as Code:** Terraform
-**Hosting:** Amazon S3, Amazon CloudFront
-**CI/CD:** GitHub Actions
+- **Frontend:** HTML, CSS
+- **Backend:** AWS Lambda (Python)
+- **Database:** Amazon DynamoDB
+- **Infrastructure as Code:** Terraform
+- **Hosting:** Amazon S3, Amazon CloudFront
+- **CI/CD:** GitHub Actions
 
 
 ## Project Features
