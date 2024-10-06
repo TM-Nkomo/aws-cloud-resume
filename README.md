@@ -14,12 +14,12 @@ This repository contains my implementation of the AWS Cloud Resume Challenge, wh
 
 
 ## Technologies Used
-**Frontend:** HTML, CSS
-**Backend:** AWS Lambda (Python)
-**Database:** Amazon DynamoDB
-**Infrastructure as Code:** Terraform
-**Hosting:** Amazon S3, Amazon CloudFront
-**CI/CD:** GitHub Actions
+- **Frontend:** HTML, CSS
+- **Backend:** AWS Lambda (Python)
+- **Database:** Amazon DynamoDB
+- **Infrastructure as Code:** Terraform
+- **Hosting:** Amazon S3, Amazon CloudFront
+- **CI/CD:** GitHub Actions
 
 
 ## Project Features
@@ -36,8 +36,9 @@ Below is an architecture diagram illustrating the flow of data and the component
 
 
 ## Usage
-Visit the live resume website at [Michelle's Awesome Resume](https://www.michellenkomo.co.za).
-The visitor counter will update automatically every time someone visits the page.
+Visit my live resume website [here](https://www.michellenkomo.co.za).
+
+The visitor counter will update automatically every time someone visits the site! :)
 
 
 ## Deployment
@@ -53,17 +54,18 @@ Deploys the static website to S3.
 
 
 ## Backend Pipeline
-Deploys the Lambda function and updates the DynamoDB table.
+Deploys the Lambda functions and updates the DynamoDB table.
 
 
 ## Testing
-The backend Lambda function are tested using pytest.
+The backend Lambda functions are tested using pytest.
 
 
 ## Challenges Faced
 Throughout the challenge, I encountered several obstacles:
 
 **IAM Permissions:** Misconfigurations led to failed Lambda executions. I learned the importance of setting up correct IAM roles and policies.
+
 **Terraform Conflicts:** I faced issues with resource conflicts due to existing AWS resources. Learning how to use data sources in Terraform was key to overcoming these challenges.
 
 
@@ -73,4 +75,5 @@ The AWS Cloud Resume Challenge was an invaluable experience that enhanced my und
 
 ## Acknowledgments
 Forrest Brazeal
+
 AWS documentation
