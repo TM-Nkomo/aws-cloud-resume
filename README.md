@@ -49,11 +49,11 @@ The project is set up with a CI/CD pipeline using GitHub Actions. Changes pushed
 The CI/CD pipeline is defined in the .github/workflows directory and includes workflows for both the frontend and backend.
 
 
-## Frontend Pipeline
+### Frontend Pipeline
 Deploys the static website to S3.
 
 
-## Backend Pipeline
+### Backend Pipeline
 Deploys the Lambda functions and updates the DynamoDB table.
 
 
